@@ -1,0 +1,13 @@
+name = "nav-database"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# D1 数据库绑定
+[[d1_databases]]
+binding = "DB"
+database_name = "nav-database"
+database_id = "your-database-id"
+
+# 环境变量（可选）
+[vars]
+# API_BASE_URL = "https://nav-database.your-subdomain.workers.dev"
