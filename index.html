@@ -386,21 +386,29 @@
 
     // 获取链接
     async function fetchLinks() {
+      console.log('开始获取链接, API_BASE:', API_BASE);
       try {
         let url = `${API_BASE}/api/links`;
         if (currentCategory !== 'all') {
           url += `/${currentCategory}`;
         }
+        console.log('请求URL:', url);
         const response = await fetch(url);
+        console.log('响应状态:', response.status);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
         const data = await response.json();
+        console.log('获取到的数据:', data);
         allLinks = data;
+        console.log('allLinks长度:', allLinks.length);
         renderLinks();
       } catch (error) {
         console.error('获取链接失败:', error);
         linksGrid.innerHTML = `
           <div class="error">
             <i class="fas fa-exclamation-circle"></i>
-            <p>加载失败，请稍后重试</p>
+            <p>加载失败: ${error.message}</p>
           </div>
         `;
       }
