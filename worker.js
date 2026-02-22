@@ -7,7 +7,7 @@ export default {
     // CORS headers
     const corsHeaders = {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     };
 
@@ -83,6 +83,54 @@ export default {
         }
 
         return new Response(JSON.stringify({ error: '添加失败' }), {
+          status: 500,
+          headers: {
+            ...corsHeaders,
+            'Content-Type': 'application/json',
+          },
+        });
+      }
+
+      // 更新链接
+      if (path.startsWith('/api/links/') && request.method === 'PUT') {
+        const id = path.split('/')[3];
+        const data = await request.json();
+
+        // 验证必填字段
+        if (!data.name || !data.url || !data.category) {
+          return new Response(JSON.stringify({ error: '缺少必填字段' }), {
+            status: 400,
+            headers: {
+              ...corsHeaders,
+              'Content-Type': 'application/json',
+            },
+          });
+        }
+
+        const result = await env.DB.prepare(
+          `UPDATE links
+           SET name = ?, url = ?, category = ?, description = ?, icon = ?, sort_order = ?
+           WHERE id = ?`
+        ).bind(
+          data.name,
+          data.url,
+          data.category,
+          data.description || '',
+          data.icon || '',
+          data.sort_order || 0,
+          id
+        ).run();
+
+        if (result.success) {
+          return new Response(JSON.stringify({ success: true }), {
+            headers: {
+              ...corsHeaders,
+              'Content-Type': 'application/json',
+            },
+          });
+        }
+
+        return new Response(JSON.stringify({ error: '更新失败' }), {
           status: 500,
           headers: {
             ...corsHeaders,

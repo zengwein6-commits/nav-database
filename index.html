@@ -314,8 +314,8 @@
   </div>
 
   <script>
-    // API配置
-    const API_BASE = 'https://nav-database.zengwein6.workers.dev';
+    // API配置（从环境变量读取）
+    const API_BASE = API_BASE_URL || 'https://nav-database.pages.dev';
 
     // 状态
     let currentCategory = 'all';
