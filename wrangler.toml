@@ -4,7 +4,7 @@ compatibility_date = "2024-01-01"
 
 # D1 数据库绑定
 [[d1_databases]]
-binding = "db"
+binding = "DB"
 database_name = "nav-database"
 database_id = "74853897-1d5a-4976-b249-9398c02aded8"
 
